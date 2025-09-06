@@ -37,7 +37,6 @@ public_users.get('/author/:author',function (req, res) {
     }
   });
 
-
   return res.send(filtered_books);
   //return res.status(300).json({message: "Yet to be implemented"});
 });
@@ -45,7 +44,16 @@ public_users.get('/author/:author',function (req, res) {
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const title = req.params.title;
+  filtered_books = [];
+  Object.keys(books).forEach((isbn) => {
+    if (books[isbn].title === title) {
+        filtered_books.push(books[isbn]); 
+    }
+  });
+
+  return res.send(filtered_books);
+  //return res.status(300).json({message: "Yet to be implemented"});
 });
 
 //  Get book review
