@@ -65,7 +65,9 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   
   reviews[username] = reviewText;
   
-  return res.send(reviews);
+  return res.status(200).json(
+    {message: "Added/Updated review of book with isbn " + isbn + " by user " + username}
+  );
   //return res.status(300).json({message: "Yet to be implemented"});
 });
 
@@ -78,7 +80,9 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
     
     delete reviews[username];
     
-    return res.send(reviews);
+    return res.status(200).json(
+      {message: "Deleted review of book with isbn " + isbn + " by user " + username}
+    );
     //return res.status(300).json({message: "Yet to be implemented"});
 });
 
