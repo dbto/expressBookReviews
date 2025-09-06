@@ -16,7 +16,7 @@ public_users.post("/register", (req,res) => {
         if (isValid(username)) {
             // Add the new user to the users array
             users.push({"username": username, "password": password});
-            return res.status(200).json({message: "User successfully registered. Now you can login"});
+            return res.status(200).json({message: "User '" + username + "' successfully registered. Now you can login"});
         } else {
             return res.status(404).json({message: "User already exists!"});
         }
@@ -65,9 +65,7 @@ public_users.get('/title/:title',function (req, res) {
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
   const isbn = req.params.isbn;
-  const reviews = {
-    "reviews": books[isbn].reviews
-  };
+  const reviews = books[isbn].reviews;
 
   return res.send(reviews);
   //return res.status(300).json({message: "Yet to be implemented"});
@@ -121,7 +119,8 @@ public_users.get('/async/author/:author', async (req, res) => {
         const getBook = (author) => {
             return new Promise((resolve, reject) => {
                 if (books) {
-                    filtered_books = Object.values(books).filter((book) => book.author === author);
+                    filtered_books = Object.values(books)
+                      .filter((book) => book.author === author);
                     resolve(filtered_books);
                 } else {
                     reject("No books");
@@ -143,7 +142,8 @@ public_users.get('/async/title/:title', async (req, res) => {
         const getBook = (title) => {
             return new Promise((resolve, reject) => {
                 if (books) {
-                    filtered_books = Object.values(books).filter((book) => book.title === title);
+                    filtered_books = Object.values(books)
+                      .filter((book) => book.title === title);
                     resolve(filtered_books);
                 } else {
                     reject("No books");
