@@ -45,12 +45,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
   const author = req.params.author;
-  filtered_books = [];
-  Object.keys(books).forEach((isbn) => {
-    if (books[isbn].author === author) {
-        filtered_books.push(books[isbn]); 
-    }
-  });
+  filtered_books = Object.values(books).filter((book) => book.author === author);
 
   return res.send(filtered_books);
   //return res.status(300).json({message: "Yet to be implemented"});
@@ -60,12 +55,7 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const title = req.params.title;
-  filtered_books = [];
-  Object.keys(books).forEach((isbn) => {
-    if (books[isbn].title === title) {
-        filtered_books.push(books[isbn]); 
-    }
-  });
+  filtered_books = Object.values(books).filter((book) => book.title === title);
 
   return res.send(filtered_books);
   //return res.status(300).json({message: "Yet to be implemented"});
@@ -81,6 +71,91 @@ public_users.get('/review/:isbn',function (req, res) {
 
   return res.send(reviews);
   //return res.status(300).json({message: "Yet to be implemented"});
+});
+
+public_users.get('/async/', async (req, res) => {
+    try {
+        // Wrap the books in Promise
+        const getBooks = () => {
+            return new Promise((resolve, reject) => {
+                if (books) {
+                    resolve(books);
+                } else {
+                    reject("No books");
+                }
+            });
+        };
+
+        const bookList = await getBooks();
+        res.send(JSON.stringify(bookList, null, 4));
+    } catch (error) {
+        res.status(500).json({message: "Error fetching books"});
+    } 
+});
+
+public_users.get('/async/isbn/:isbn', async (req, res) => {
+    try {
+        const isbn = req.params.isbn;
+        // Wrap the books in Promise
+        const getBook = (isbn) => {
+            return new Promise((resolve, reject) => {
+                if (books[isbn]) {
+                    resolve(books[isbn]);
+                } else {
+                    reject("No book with isbn: " + isbn);
+                }
+            });
+        };
+
+        const book = await getBook(isbn);
+        res.send(book);
+    } catch (error) {
+        res.status(500).json({message: error});
+    } 
+});
+
+public_users.get('/async/author/:author', async (req, res) => {
+    try {
+        const author = req.params.author;
+        // Wrap the books in Promise
+        const getBook = (author) => {
+            return new Promise((resolve, reject) => {
+                if (books) {
+                    filtered_books = Object.values(books).filter((book) => book.author === author);
+                    resolve(filtered_books);
+                } else {
+                    reject("No books");
+                }
+            });
+        };
+
+        const book = await getBook(author);
+        res.send(book);
+    } catch (error) {
+        res.status(500).json({message: error});
+    } 
+});
+
+public_users.get('/async/title/:title', async (req, res) => {
+    try {
+        const title = req.params.title;
+        // Wrap the books in Promise
+        const getBook = (title) => {
+            return new Promise((resolve, reject) => {
+                if (books) {
+                    filtered_books = Object.values(books).filter((book) => book.title === title);
+                    resolve(filtered_books);
+                } else {
+                    reject("No books");
+                }
+            });
+        };
+
+        const book = await getBook(title);
+        res.send(book);
+    } catch (error) {
+        res.status(500).json({message: error});
+    } 
 });
 
 module.exports.general = public_users;
