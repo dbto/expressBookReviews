@@ -1,5 +1,6 @@
 const express = require('express');
 let books = require("./booksdb.js");
+const { authenticated } = require('./auth_users.js');
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
@@ -28,7 +29,17 @@ public_users.get('/isbn/:isbn',function (req, res) {
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const author = req.params.author;
+  filtered_books = [];
+  Object.keys(books).forEach((isbn) => {
+    if (books[isbn].author === author) {
+        filtered_books.push(books[isbn]); 
+    }
+  });
+
+
+  return res.send(filtered_books);
+  //return res.status(300).json({message: "Yet to be implemented"});
 });
 
 // Get all books based on title
