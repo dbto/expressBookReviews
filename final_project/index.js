@@ -28,9 +28,74 @@ app.use("/customer/auth/*", function auth(req,res,next){
         return res.status(403).json({ message: "User not logged in" });
     }
 });
- 
+
+// -----------------------AXIOS----------------------------
+const axios = require('axios').default;
+const axiosRouter = express.Router();
+
+axiosRouter.get("/", function (req, res) {
+  //Write your code here
+  axios.get("http://localhost:5000/")
+    .then((result) => {
+        console.log(result.data);
+        return res.send(result.data);
+    })
+    .catch((error) => {
+        console.error(error);
+        return res.send(error);
+    });
+  //return res.status(300).json({message: "Yet to be implemented"});
+});
+
+axiosRouter.get("/isbn/:isbn", function (req, res) {
+  //Write your code here
+  const isbn = req.params.isbn;
+  axios.get("http://localhost:5000/isbn/" + isbn)
+    .then((result) => {
+        console.log(result.data);
+        return res.send(result.data);
+    })
+    .catch((error) => {
+        console.error(error);
+        return res.send(error);
+    });
+  //return res.status(300).json({message: "Yet to be implemented"});
+});
+
+axiosRouter.get("/author/:author", function (req, res) {
+  //Write your code here
+  const author = req.params.author;
+  axios.get("http://localhost:5000/author/" + author)
+    .then((result) => {
+        console.log(result.data);
+        return res.send(result.data);
+    })
+    .catch((error) => {
+        console.error(error);
+        return res.send(error);
+    });
+  //return res.status(300).json({message: "Yet to be implemented"});
+});
+
+axiosRouter.get("/title/:title", function (req, res) {
+  //Write your code here
+  const title = req.params.title;
+  axios.get("http://localhost:5000/title/" + title)
+    .then((result) => {
+        console.log(result.data);
+        return res.send(result.data);
+    })
+    .catch((error) => {
+        console.error(error);
+        return res.send(error);
+    });
+  //return res.status(300).json({message: "Yet to be implemented"});
+});
+// -----------------------AXIOS----------------------------
+
 const PORT =5000;
 
+app.use("/axios", axiosRouter);
 app.use("/customer", customer_routes);
 app.use("/", genl_routes);
 
